@@ -51,14 +51,23 @@ class CalcController {
     }
   }
 
+  // calcular e guardar o resultado na primeira posição no Array
   calc() {
     let last = this._operation.pop();
     let result = eval(this._operation.join(''));
     this._operation = [result, last];
+    this.setLastNumberToDisplay();
   }
-
+  // exibir o último número no display da calculadora
   setLastNumberToDisplay() {
-
+    let lastNumber;
+    for (let i = this._operation.length - 1; i >= 0; i--) {
+      if (!this.isOperator(this._operation[i])) {
+        lastNumber = this._operation[i];
+        break;
+      }
+    }
+    this.displayCalc = lastNumber;
   }
 
   addOperation(value) {
@@ -69,6 +78,7 @@ class CalcController {
         console.log('outra coisa', value);
       } else {
         this.pushOperation(value);
+        this.setLastNumberToDisplay();
       }
 
     } else {
@@ -124,6 +134,7 @@ class CalcController {
         this.addOperation('.');
         break;
 
+      // caso seja um número, adicionar e converter a string em número
       case '0':
       case '1':
       case '2':
@@ -152,6 +163,7 @@ class CalcController {
         this.execBtn(textBtn);
       });
 
+      // alterar o cursor do mouse para estilo pointer
       this.addEventListenerAll(btn, 'mouseover mouseup mousedown', e => {
         btn.style.cursor = 'pointer';
       });
