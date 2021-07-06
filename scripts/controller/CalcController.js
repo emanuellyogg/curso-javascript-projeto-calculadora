@@ -78,9 +78,6 @@ class CalcController {
       this._lastNumber = this.getLastItem(false);
     }
 
-    console.log('_lastOperator', this._lastOperator);
-    console.log('_lastNumber', this._lastNumber);
-
     let result = this.getResult();
 
     // calcular com % porcento
