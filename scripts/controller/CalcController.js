@@ -11,11 +11,13 @@ class CalcController {
     this.initButtonsEvents();
   }
 
+  // iniciar a calculadora, display
   initialize() {
     this.setDisplayDateTime();
     setInterval(() => {
       this.setDisplayDateTime();
     }, 1000);
+    this.setLastNumberToDisplay();
   }
 
   addEventListenerAll(element, events, fn) {
@@ -24,12 +26,16 @@ class CalcController {
     });
   }
 
+  // limpar a tela e toda as operações anteriores
   clearAll() {
     this._operation = [];
+    this.setLastNumberToDisplay();
   }
 
+  // limpar os últimos elementos inseridos
   clearEntry() {
     this._operation.pop();
+    this.setLastNumberToDisplay();
   }
 
   getLastOperation() {
@@ -53,11 +59,23 @@ class CalcController {
 
   // calcular e guardar o resultado na primeira posição no Array
   calc() {
-    let last = this._operation.pop();
+    let last = '';
+    if (this._operation.length > 3) {
+      last = this._operation.pop();
+
+    }
     let result = eval(this._operation.join(''));
-    this._operation = [result, last];
+    // calcular com % porcento
+    if (last == '%') {
+      result /= 100;
+      this._operation = [result];
+    } else {
+      this._operation = [result];
+      if (last) this._operation.push(last);
+    }
     this.setLastNumberToDisplay();
   }
+
   // exibir o último número no display da calculadora
   setLastNumberToDisplay() {
     let lastNumber;
@@ -67,6 +85,7 @@ class CalcController {
         break;
       }
     }
+    if (!lastNumber) lastNumber = 0;
     this.displayCalc = lastNumber;
   }
 
@@ -127,7 +146,7 @@ class CalcController {
         break;
 
       case 'igual':
-
+        this.calc();
         break;
 
       case 'ponto':
