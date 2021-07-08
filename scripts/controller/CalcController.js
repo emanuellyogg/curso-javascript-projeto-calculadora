@@ -129,7 +129,7 @@ class CalcController {
         this.pushOperation(value);
       } else {
         let newValue = this.getLastOperation().toString() + value.toString()
-        this.setLastOperation(parseFloat(newValue));
+        this.setLastOperation(newValue);
         this.setLastNumberToDisplay();
       }
     }
@@ -142,6 +142,8 @@ class CalcController {
   //método para a inserção do "." na calculadora
   addDot() {
     let lastOperation = this.getLastOperation();
+
+    if (typeof lastOperation === 'string' && lastOperation.split('').indexOf('.') > -1) return;
 
     if (this.isOperator(lastOperation) || !lastOperation) {
       this.pushOperation('0.');
