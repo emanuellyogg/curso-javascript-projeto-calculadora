@@ -14,6 +14,23 @@ class CalcController {
     this.initKeyBoard();
   }
 
+  pasteFromClipboard() {
+    document.addEventListener('paste', e => {
+      let text = e.clipboardData.getData('Text');
+      this.displayCalc = parseFloat(text);
+    });
+  }
+
+  // metodo para criar área de transferência no display e fazer Ctrl c e Ctrl V
+  copyToClipboard() {
+    let input = document.createElement('input');
+    input.value = this.displayCalc;
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand("Copy");
+    input.remove();
+  }
+
   // iniciar a calculadora, display
   initialize() {
     this.setDisplayDateTime();
@@ -21,6 +38,7 @@ class CalcController {
       this.setDisplayDateTime();
     }, 1000);
     this.setLastNumberToDisplay();
+    this.pasteFromClipboard();
   }
 
   // metodo para capturar os eventos de teclados
@@ -66,8 +84,8 @@ class CalcController {
           this.addOperation(parseInt(e.key));
           break;
 
-        default:
-          this.setError();
+        case 'c':
+          if (e.ctrlKey) this.copyToClipboard();
           break;
       }
     })
@@ -254,10 +272,6 @@ class CalcController {
       case '8':
       case '9':
         this.addOperation(parseInt(value));
-        break;
-
-      default:
-        this.setError();
         break;
     }
   }
