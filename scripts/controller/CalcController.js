@@ -198,7 +198,7 @@ class CalcController {
         break;
       }
     }
-    if (!lastItem) {
+    if (!lastItem && lastItem != 0) {
       lastItem = (isOperator) ? this._lastOperator : this._lastNumber;
     }
     return lastItem;
